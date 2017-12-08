@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subscription xmlns="http://schemas.microsoft.com/2006/03/windows/events/subscription">
+                <SubscriptionId>InterestingAccounts</SubscriptionId>
+                <SubscriptionType>SourceInitiated</SubscriptionType>
+                <Description>InterestingAccounts</Description>
+                <Enabled>true</Enabled>
+                <Uri>http://schemas.microsoft.com/wbem/wsman/1/windows/EventLog</Uri>
+                <ConfigurationMode>Custom</ConfigurationMode>
+	<Delivery Mode="Push">
+		<Batching>
+			<MaxLatencyTime>1000</MaxLatencyTime>
+		</Batching>
+		<PushSettings>
+			<Heartbeat Interval="60000"/>
+		</PushSettings>
+	</Delivery>
+	<Query>
+	<!-- list of accounts you wish to track where you substitite the account name for Person1 etc, limit of 15 per subscription due to Xpath1 limitations, make additional subscriptions as needed -->
+	
+
+
+                                <![CDATA[
+<QueryList>
+
+  <Query Id="0" Path="Security">
+    <Select Path="Security">
+(*[EventData[Data[@Name="TargetUserName"] = "Person1"]]) or 
+(*[EventData[Data[@Name="TargetUserName"] = "Person2"]]) 
+and 
+      (*[System[Provider[@Name='Microsoft-Windows-Security-Auditing'] and (EventID=4624 or EventID=4625 or EventID=4648)]])
+    </Select>
+  </Query>
+</QueryList>
+                                ]]>
+                
+	</Query>
+	<ReadExistingEvents>true</ReadExistingEvents>
+	<TransportName>HTTP</TransportName>
+	<ContentFormat>RenderedText</ContentFormat>
+	<Locale Language="en-US"/>
+	<LogFile>ForwardedEvents</LogFile>
+	<PublisherName>Microsoft-Windows-EventCollector</PublisherName>
+	<AllowedSourceNonDomainComputers></AllowedSourceNonDomainComputers>
+	<!-- if you have multiple domains, you will need to get the identifiers of all the domains connecting to your Event Collector and put them below.  the easiest way is just to make a new subscription from the GUI and export it, then cut and paste that field in. 
+	The SDDL below is just the well known identifiers for "Domain Users" and "Domain Computers" -->                
+	<AllowedSourceDomainComputers>O:NSG:BAD:P(A;;GA;;;DC)(A;;GA;;;DD)S:</AllowedSourceDomainComputers>
+</Subscription>

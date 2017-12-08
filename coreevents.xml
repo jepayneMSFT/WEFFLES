@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subscription xmlns="http://schemas.microsoft.com/2006/03/windows/events/subscription">
+	<SubscriptionId>CoreEvents</SubscriptionId>
+	<SubscriptionType>SourceInitiated</SubscriptionType>
+	<Description>CoreEvents</Description>
+	<Enabled>true</Enabled>
+	<Uri>http://schemas.microsoft.com/wbem/wsman/1/windows/EventLog</Uri>
+	<ConfigurationMode>Custom</ConfigurationMode>
+	<Delivery Mode="Push">
+		<Batching>
+			<MaxLatencyTime>1000</MaxLatencyTime>
+		</Batching>
+		<PushSettings>
+			<Heartbeat Interval="60000"/>
+		</PushSettings>
+	</Delivery>
+	<Query>
+		<![CDATA[
+<QueryList>
+<!-- event for new local account created-->
+<Query Id="0">
+<Select Path="Security">*[System[(EventID=4720)]]</Select>
+</Query>
+
+<!-- Security Event Log cleared-->
+<Query Id="1">
+<Select Path="Security">*[System[(EventID=1102)]]</Select>
+</Query>
+
+<!-- New Service Installed-->
+<Query Id="2">
+<Select Path="System">*[System[(EventID=7045)]]</Select>
+</Query>
+
+<!--Scheduled Task Registered-->
+<Query Id="3"><Select Path="Microsoft-Windows-TaskScheduler/Operational">*[System[(EventID=106)]]</Select>
+</Query>
+
+<!--Scheduled Task Executed-->
+<Query Id="4"><Select Path="Microsoft-Windows-TaskScheduler/Operational">*[System[(EventID=200)]]</Select>
+</Query>
+
+
+
+</QueryList>
+		]]>
+		
+	</Query>
+	<ReadExistingEvents>true</ReadExistingEvents>
+	<TransportName>HTTP</TransportName>
+	<ContentFormat>RenderedText</ContentFormat>
+	<Locale Language="en-US"/>
+	<LogFile>ForwardedEvents</LogFile>
+	<PublisherName>Microsoft-Windows-EventCollector</PublisherName>
+	<AllowedSourceNonDomainComputers></AllowedSourceNonDomainComputers>
+	<!-- if you have multiple domains, you will need to get the identifiers of all the domains connecting to your Event Collector and put them below.  the easiest way is just to make a new subscription from the GUI and export it, then cut and paste that field in. 
+	The SDDL below is just the well known identifiers for "Domain Users" and "Domain Computers" -->                
+	<AllowedSourceDomainComputers>O:NSG:BAD:P(A;;GA;;;DC)(A;;GA;;;DD)S:</AllowedSourceDomainComputers>
+</Subscription>
