@@ -48,6 +48,7 @@ You can get laser focus on the activities you need to see, versus combing throug
 
 It's also incredibly useful for solving that question of "what DOES that legacy account in Domain Admins that we're afraid to remove do?" as you get logs from both
 domain controllers and workstations as well as the process and logon type - and you also get 4625 logon failed events, so you can rapidly find if something does break. #>
+
 #Import the core subscriptions, if you edited the "Interesting Accounts" example, uncomment that, and if you have Defender as your AV, uncomment the MalwareEvents 
 #wecutil cs "InterestingAccounts.xml"
 #wecutil cs "MalwareEvents.xml"

@@ -79,20 +79,39 @@ $action = {
                      
                 #Adding AuthenticationPackageName to .csv object
                 $EventObj | Add-Member noteproperty AuthenticationPackageName $EventRecordXml.SelectSingleNode("//*[@Name='AuthenticationPackageName']")."#text"
+				
+				#Adding Message body to .csv object
                 $EventObj | Add-Member noteproperty Message $EventRecordXml.SelectSingleNode("//*[@Name='Message']")."#text"
+				
+				#Adding ActionName to .csv object
                 $EventObj | Add-Member noteproperty ActionName $EventRecordXml.SelectSingleNode("//*[@Name='ActionName']")."#text"
                 
+				#Adding ServiceName to .csv object 
 				$EventObj | Add-Member noteproperty ServiceName $EventRecordXml.SelectSingleNode("//*[@Name='ServiceName']")."#text"
+				
+				#Adding ImagePath to .csv object
                 $EventObj | Add-Member noteproperty ImagePath $EventRecordXml.SelectSingleNode("//*[@Name='ImagePath']")."#text"
+				
+				#Adding ServiceType to .csv object 
                 $EventObj | Add-Member noteproperty ServiceType $EventRecordXml.SelectSingleNode("//*[@Name='ServiceType']")."#text"
+				
+				#Adding StartType to .csv object 
                 $EventObj | Add-Member noteproperty StartType $EventRecordXml.SelectSingleNode("//*[@Name='StartType']")."#text"
+				
+				#Adding AccountName to .csv object
                 $EventObj | Add-Member noteproperty AccountName $EventRecordXml.SelectSingleNode("//*[@Name='AccountName']")."#text"
+				
+				#Adding Computer to .csv object 
                 $EventObj | Add-Member noteproperty Computer $EventRecordXml.SelectSingleNode("//*[@Name='Computer']")."#text"
+				
+				#Adding UserID to .csv object
                 $EventObj | Add-Member noteproperty UserID $EventRecord.UserID
 
                 
                               
                 #Adding Action type after resolving EventID -> Action name to .csv object
+				
+				#Adding 4624 logon success events to our csv
                 If ($EventRecord.ID -eq '4624')
                     {
 					
@@ -111,6 +130,7 @@ $action = {
                      
                     }
 					
+					#Adding 4625 logon failed events to our csv 
                     If ($EventRecord.ID -eq '4625')
                     {
 					
@@ -130,6 +150,7 @@ $action = {
                      
                     }
                     
+					#Adding 4648 logon with explict credentials to our csv
 					If ($EventRecord.ID -eq '4648')
                     {
 					
@@ -147,6 +168,9 @@ $action = {
                      
                     }
 					
+				#Adding 4964 Special Logon events to our csv 
+				#see https://blogs.technet.microsoft.com/jepayne/2015/11/26/tracking-lateral-movement-part-one-special-groups-and-specific-service-accounts/ for use 
+				
                 If ($EventRecord.ID -eq '4964')
                     {
                       $hash = New-Object psobject -Property @{
@@ -160,7 +184,7 @@ $action = {
 					   
                     
                     }
-					
+					#Adding 1102 event log cleared to our csv
 					If ($EventRecord.ID -eq '1102')
                     {
                      $hash = New-Object psobject -Property @{
@@ -169,14 +193,17 @@ $action = {
 						   };
                      
                     }
-				If ($EventRecord.ID -eq '106')
+					
+					#Adding 106 new scheduled task registered to our csv 
+					If ($EventRecord.ID -eq '106')
                     {
                      $hash = New-Object psobject -Property @{
                            Message = $EventRecordXml.SelectSingleNode("//*[@Name='Message']")."#text" 
 						   };
                      }
 				    
-				If ($EventRecord.ID -eq '200')
+					#Adding 200 scheduled task execution events to our csv 
+					If ($EventRecord.ID -eq '200')
                     {
                      $hash = New-Object psobject -Property @{
                            ActionName = $EventRecordXml.SelectSingleNode("//*[@Name='ActionName']")."#text" 
@@ -184,8 +211,8 @@ $action = {
                      
                     }
 				
-				                
-				If ($EventRecord.ID -eq '7045')
+				      #Adding 7045 new service creations to our csv          
+					If ($EventRecord.ID -eq '7045')
                     {
 					$hash = New-Object psobject -Property @{
                            ServiceName = $EventRecordXml.SelectSingleNode("//*[@Name='ServiceName']")."#text"
@@ -195,7 +222,9 @@ $action = {
                            AccountName = $EventRecordXml.SelectSingleNode("//*[@Name='AccountName']")."#text"
                        };
 					}
-                ElseIf ($EventRecord.ID -eq '4720')
+					
+					#Adding 4720 new local user created events to our csv 
+					ElseIf ($EventRecord.ID -eq '4720')
                     {
 					$hash = New-Object psobject -Property @{
                            SubjectUserName = $EventRecordXml.SelectSingleNode("//*[@Name='SubjectUserName']")."#text"
