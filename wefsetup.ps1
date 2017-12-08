@@ -15,7 +15,8 @@ cd C:\weffles
 <#If you don't want to manually create a WEF GPO following the instructions at https://aka.ms/weffles you can use this to create a GPO in the domain from the backup version provided in the weffles zip file - this will create a GPO which is NOT linked to anything, so you can link to test OUs and test the 
 rollout without deploying all at once. If you uncomment this line and chose to do that versus creating the GPO manually, the script will need to be run with an account that has permissions
 to create GPOs in the domain, and you will need to have the AD module available on the box. You might just take this command and the GUID/GPO folder and run them stand alone on a GPO 
-editor's machine prior to doing the rest of the script. The GPO this is referencing is provided in the F9763831-99BB-4F8D-B145-022D7EB719F9.zip file in the GitHub repo. After creation tou will need to edit the server name to the FQDN of your collector server. #>
+editor's machine prior to doing the rest of the script. The GPO this is referencing is provided in the F9763831-99BB-4F8D-B145-022D7EB719F9.zip file in the GitHub repo. 
+After creation you will need to edit the server name to the FQDN of your collector server, unless your server is in fact named wec.contoso.com  #>
 
 #Import-GPO -BackupGPOName "WEF GPO" -TargetName "Windows Event Forwarding GPO" -CreateIfNeeded -Path "C:\weffles\"
 
