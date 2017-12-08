@@ -2,6 +2,8 @@
 
 from https://aka.ms/jessica @jepayneMSFT with some help from Kurt Falde @kurt_falde
 
+Current version uses EventLogWatcher.psm1 from https://pseventlogwatcher.codeplex.com - although @Lee_Holmes told me BinaryFormatter was not optimal so that may change. :) 
+
 #>
 
 <#WEFFLES is currently hard coded to a directory, this is because of the need to have it be a fast and failproof solution for IR situations. 
@@ -34,6 +36,18 @@ wecutil qc -quiet
 #If you need to export any existing subscriptions, or want to export a subscription made via the gui to get SDDLs of domains
 #use wecutil gs "%subscriptionname%" /f:xml >>"C:\Temp\%subscriptionname%.xml"
 
+<#This is where we actuall import the Windows Event Collector subscriptions, i.e. the events we're going to collect. WEFFLES intentionally is NOT gathering "all the things"
+and instead we want to get targeted "known bad" or "possibly shady" events. The core events file looks for these item : 
+7045 : new service creations to look for persistence 
+200 and 106 : scheduled task operations, also for persistence and execution 
+4720: creation of local accounts, sometimes done as a malware free backdoor 
+1102: clearing the security event log (anywhere you see that is a machine that should automatically get deeper forensic analysis) 
+
+The "InterestingAccounts.xml subscription is one I use to specifically track either high value accounts, or known compromised accounts. 
+You can get laser focus on the activities you need to see, versus combing through millions of logon events to start with. 
+
+It's also incredibly useful for solving that question of "what DOES that legacy account in Domain Admins that we're afraid to remove do?" as you get logs from both
+domain controllers and workstations as well as the process and logon type - and you also get 4625 logon failed events, so you can rapidly find if something does break. #>
 #Import the core subscriptions, if you edited the "Interesting Accounts" example, uncomment that, and if you have Defender as your AV, uncomment the MalwareEvents 
 #wecutil cs "InterestingAccounts.xml"
 #wecutil cs "MalwareEvents.xml"
