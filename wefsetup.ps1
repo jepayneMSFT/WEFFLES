@@ -61,5 +61,6 @@ schtasks.exe /create /tn "WEF Parsing Task" /xml WEFFLESParsingTask.xml
 #it is also annoying though, as sometimes you spend a good 5+ minutes thinking WEFFLES isn't working. Be patient. :)
 Set-Service -Name Wecsvc -StartupType "Automatic"
 
-#reboot
+<#You need to reboot now, uncomment if you want to do it automatically. After reboot let the machine cook for five minutes, and then you should see a weffles.csv in the c:\weffles
+directory, and then you can use the weffles.pbix PowerBI desktop to analyze it - make sure the pbix and the csv are in a directory c:\weffles on your machine and open the .pbx and then hit refresh. #>
 #Restart-Computer
