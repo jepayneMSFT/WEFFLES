@@ -33,7 +33,11 @@ $action = {
                 #can actually query the $EventRecord / $EventRecordXML etc for troubleshooting
                 #$host.EnterNestedPrompt()
                 $outfile = "c:\weffles\weffles.csv"
-
+				<#The Add-Member items below are what read out the portions of the XML of the event record and add them to the csv file. 
+				Not all Event IDs have the same record data, so as you can see below we customize which fields we read out and add to the csv as text. 
+				If you want to add new Events in the future, find a relevant record in Event Viewer, and click on the details tab and then XML view of the event, and you'll
+				be able to see what the labels are for all the fields of the event. You just add them to the Add-Member area below, and then create a new If statement section for your event.
+				#>
                 #Creating object to output to .csv
                 $EventObj = New-Object psobject
                 
@@ -184,16 +188,7 @@ $action = {
 				If ($EventRecord.ID -eq '7045')
                     {
 					$hash = New-Object psobject -Property @{
-                           LogonType = $EventRecordXml.SelectSingleNode("//*[@Name='LogonType']")."#text"   
-                           IpAddress = $EventRecordXml.SelectSingleNode("//*[@Name='IpAddress']")."#text"                     
-                           WorkstationName = $EventRecordXml.SelectSingleNode("//*[@Name='WorkstationName']")."#text"                     
-                           ProcessName = $EventRecordXml.SelectSingleNode("//*[@Name='ProcessName']")."#text" 
-                           SubjectUserName = $EventRecordXml.SelectSingleNode("//*[@Name='SubjectUserName']")."#text"
-                           SubjectDomainName = $EventRecordXml.SelectSingleNode("//*[@Name='AuthenticationPackageName']")."#text" 
-						   AuthenticationPackageName = $EventRecordXml.SelectSingleNode("//*[@Name='AuthenticationPackageName']")."#text"
-						   TargetUserName = $EventRecordXml.SelectSingleNode("//*[@Name='TargetUserName']")."#text"
-						   TargetDomainName = $EventRecordXml.SelectSingleNode("//*[@Name='TargetDomainName']")."#text"
-						   ServiceName = $EventRecordXml.SelectSingleNode("//*[@Name='ServiceName']")."#text"
+                           ServiceName = $EventRecordXml.SelectSingleNode("//*[@Name='ServiceName']")."#text"
                            ImagePath = $EventRecordXml.SelectSingleNode("//*[@Name='ImagePath']")."#text"
                            ServiceType = $EventRecordXml.SelectSingleNode("//*[@Name='ServiceType']")."#text"
                            StartType = $EventRecordXml.SelectSingleNode("//*[@Name='StartType']")."#text"

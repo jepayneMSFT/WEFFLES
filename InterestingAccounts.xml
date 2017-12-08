@@ -25,7 +25,8 @@
   <Query Id="0" Path="Security">
     <Select Path="Security">
 (*[EventData[Data[@Name="TargetUserName"] = "Person1"]]) or 
-(*[EventData[Data[@Name="TargetUserName"] = "Person2"]]) 
+(*[EventData[Data[@Name="TargetUserName"] = "Person2"]]) or 
+(*[EventData[Data[@Name="TargetUserName"] = "Person3"]]) 
 and 
       (*[System[Provider[@Name='Microsoft-Windows-Security-Auditing'] and (EventID=4624 or EventID=4625 or EventID=4648)]])
     </Select>
