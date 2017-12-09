@@ -23,7 +23,8 @@ If ($TestStream -eq $null) {Remove-Item .\bookmark.stream}
 
 $BookmarkToStartFrom = Get-BookmarkToStartFrom
 
-$EventLogQuery = New-EventLogQuery "ForwardedEvents" -Query "*[System[EventID=4964]] or *[System[EventID=4624]] or *[System[EventID=4625]] or *[System[EventID=4648]] or *[System[EventID=1102]] or *[System[EventID=7045]] or *[System[EventID=4720]] or *[System[EventID=106]]or *[System[EventID=200]]"
+$EventLogQuery = New-EventLogQuery "ForwardedEvents" -Query "*[System[EventID=4964]] or *[System[EventID=4624]] or *[System[EventID=4625]] or *[System[EventID=4648]] 
+or *[System[EventID=1102]] or *[System[EventID=7045]] or *[System[EventID=4720]] or *[System[EventID=106]] or *[System[EventID=200]] or *[System[EventID=4740]]"
 
 $EventLogWatcher = New-EventLogWatcher -EventLogQuery $EventLogQuery -BookmarkToStartFrom $BookmarkToStartFrom
 # $EventLogQuery $BookmarkToStartFrom 
@@ -33,10 +34,13 @@ $action = {
                 #can actually query the $EventRecord / $EventRecordXML etc for troubleshooting
                 #$host.EnterNestedPrompt()
                 $outfile = "c:\weffles\weffles.csv"
-				<#The Add-Member items below are what read out the portions of the XML of the event record and add them to the csv file. 
+				<#
+				
+				The Add-Member items below are what read out the portions of the XML of the event record and add them to the csv file. 
 				Not all Event IDs have the same record data, so as you can see below we customize which fields we read out and add to the csv as text. 
 				If you want to add new Events in the future, find a relevant record in Event Viewer, and click on the details tab and then XML view of the event, and you'll
 				be able to see what the labels are for all the fields of the event. You just add them to the Add-Member area below, and then create a new If statement section for your event.
+				
 				#>
                 #Creating object to output to .csv
                 $EventObj = New-Object psobject
@@ -220,6 +224,17 @@ $action = {
                            ServiceType = $EventRecordXml.SelectSingleNode("//*[@Name='ServiceType']")."#text"
                            StartType = $EventRecordXml.SelectSingleNode("//*[@Name='StartType']")."#text"
                            AccountName = $EventRecordXml.SelectSingleNode("//*[@Name='AccountName']")."#text"
+                       };
+					}
+					  
+					#Adding 4740 account lockouts to our csv          
+					If ($EventRecord.ID -eq '4740')
+                    {
+					$hash = New-Object psobject -Property @{
+                           TargetUserName = $EventRecordXml.SelectSingleNode("//*[@Name='TargetUserName']")."#text"
+						   TargetDomainName = $EventRecordXml.SelectSingleNode("//*[@Name='TargetDomainName']")."#text"
+						   SubjectUserName = $EventRecordXml.SelectSingleNode("//*[@Name='SubjectUserName']")."#text"
+                           SubjectDomainName = $EventRecordXml.SelectSingleNode("//*[@Name='AuthenticationPackageName']")."#text" 
                        };
 					}
 					
