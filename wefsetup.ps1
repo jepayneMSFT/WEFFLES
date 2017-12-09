@@ -1,4 +1,4 @@
-<#  Setup script for Subscription Server for Security Events and reporting
+<#  Setup script for Creating an IR/Threat Hunting Console with Windows Event Forwaring and PowerBI 
 
 from https://aka.ms/jessica @jepayneMSFT with some help from Kurt Falde @kurt_falde
 
