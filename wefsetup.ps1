@@ -1,4 +1,4 @@
-<#  Setup script for Creating an IR/Threat Hunting Console with Windows Event Forwaring and PowerBI 
+<#  Setup script for Creating an IR/Threat Hunting Console with Windows Event Forwaring and PowerBI full documentation at https://aka.ms/weffles
 
 from https://aka.ms/jessica @jepayneMSFT with some help from Kurt Falde @kurt_falde
 
