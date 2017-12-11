@@ -27,7 +27,8 @@
 (*[EventData[Data[@Name="TargetUserName"] = "Person1"]]) or 
 (*[EventData[Data[@Name="TargetUserName"] = "Person2"]]) or 
 (*[EventData[Data[@Name="TargetUserName"] = "Person3"]]) 
-and and *[System[(EventID=4624 or EventID=4625 or EventID=4648)]]
+
+and *[System[(EventID=4624 or EventID=4625 or EventID=4648)]]
 </Select>
   </Query>
 </QueryList>
